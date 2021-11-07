@@ -1,0 +1,22 @@
+stateMachines:
+  - name: CLIENT_EXECUTE_COMMAND_REQUEST
+    title: 'This state machine is run when the client sends the command to the leader'
+    commandProcessorClass: com.tmlabs.springraft.services.ClientExecuteCommandRequestProcessor
+    states:
+      - name: START
+        title: 'Any initialization needed'
+        nextState: LEADER_CHECK
+        command:
+          name: INIT_CLIENT_EXECUTE_COMMAND_REQUEST
+
+      - name: LEADER_CHECK
+        title: 'Check to see if this node is leader or not'
+        nextState: LOG_LOCAL_APPEND
+        command:
+          name: CHECK_LEADER
+
+      - name: LOG_LOCAL_APPEND
+        title: 'Append the logentry to the log'
+        nextState: DONE
+        command:
+          name: APPEND_LOG_LOCAL
